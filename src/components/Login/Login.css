@@ -1,0 +1,97 @@
+.login {
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(153deg, rgba(255,255,255,1) 23%, rgba(84,84,153,1) 47%, rgba(255,255,255,1) 70%);
+    justify-content: center;
+}
+
+.login-title {
+    font-size: 2rem;
+    margin: 2rem 0;
+}
+
+.login-title, .login-subtitle, .login-input, .login-btn {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.login-form {
+    margin: 0 auto;
+    width: 350px;
+    height: 400px;
+    background-color: grey;
+    justify-content: space-evenly;
+    border-radius: 25px;
+    box-shadow: -3px 3px 5px 2px rgba(0, 0, 0, 0.712);
+}
+
+.login-form, .login-box, .login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-subtitle {
+    font-size: 1.2rem;
+    margin: .5rem 0;
+}
+
+.login-input {
+    width: 200px;
+    max-width: 200px;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    padding: .5rem 0;
+    text-align: center;
+    transition: .5s all ease;
+}
+
+.login-input:hover {
+    box-shadow: -1px 1px 5px 1px black;
+    transition: .5s all ease;
+}
+
+.login-input:focus {
+    outline: none;
+    box-shadow: none;
+    border: 2px solid burlywood;
+}
+
+.login-pass {
+    position: relative;
+}
+
+.login-vis {
+    position: absolute;
+    top: 23%;
+    margin: 0 .5rem;
+    cursor: pointer;
+}
+
+.login-btns {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.login-btn {
+    margin: 10px 0;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 25px;
+    background-color: cornflowerblue;
+    cursor: pointer;
+}
+
+.login-google {
+    background-color: rgb(0, 0, 0);
+    color: rgb(207, 200, 200);
+    display: flex;
+    align-items: center;
+}
+
+.icon-google {
+    margin: 0 5px;
+    width: 15px;
+    height: 15px;
+}

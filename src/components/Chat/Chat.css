@@ -1,0 +1,47 @@
+ul {
+    list-style-type: none;
+}
+
+.bubble-one {
+    /* Estilos para índices impares */
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    margin: 1rem 0;
+    padding: 10px;
+    position: relative;
+    width: fit-content;
+}
+
+.bubble-one::before {
+    /* Puntero de la burbuja de chat hacia la izquierda */
+    border: 10px solid transparent;
+    border-right-color: #f2f2f2;
+    content: "";
+    height: 0;
+    left: -19px;
+    position: absolute;
+    top: 10px;
+    width: 0;
+}
+
+.bubble-two {
+    /* Estilos para índices pares */
+    background-color: #e6dcff;
+    border-radius: 10px;
+    margin: 1rem 0;
+    padding: 10px;
+    position: relative;
+    width: fit-content;
+}
+
+.bubble-two::before {
+    /* Puntero de la burbuja de chat hacia la derecha */
+    border: 10px solid transparent;
+    border-left-color: #e6dcff;
+    content: "";
+    height: 0;
+    position: absolute;
+    right: -19px;
+    top: 10px;
+    width: 0;
+}
