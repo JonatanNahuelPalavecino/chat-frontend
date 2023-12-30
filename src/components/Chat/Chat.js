@@ -24,7 +24,7 @@ export const Chat = () => {
         socket.emit('userOnLine', login.usuario)
 
         socket.on('userOnLine', (usersOnLine) => {
-          console.log(usersOnLine);
+          setUsers(usersOnLine);
         })
 
         return () => {
@@ -35,8 +35,6 @@ export const Chat = () => {
       }
   
     }, [login, socket])
-
-    //console.log(users);
 
     if (!login.estado) {
       return <Navigate to="/"/>;
@@ -57,45 +55,93 @@ export const Chat = () => {
       }
       setMessages([ ...messages, newMessage])
       socket.emit("message", message)
-
+      
       form.reset()
-  
+      
     }
-
+    
     const handleClose = () => {
-
+      
       socket.emit("logout", login.usuario)
       setLogin({
         estado: false,
         usuario: "Usuario no conectado"
-    })
+      })
+
       return <Navigate to="/"/>
       
     }
     
+    //console.log(users);
   
     return (
       <>
-        <p>Usuario {login.usuario} conectado</p>
-        
-        <button onClick={handleClose}>SALIR DEL CHAT</button>
-        <form id='form' onSubmit={handleSubmit}>
-          <input 
-            type="text" 
-            placeholder="write your message..."
-            onChange={handleInput}
-          />
-          <button type='submit'>Send</button>
-        </form>
-        <ul>
-          {
-            messages.map((dato, index) => {
-              return <li key={index} className={dato.from === "Me" ? "bubble-one" : "bubble-two"}>
+        <main className='chat'>
+
+          <div className='chat-box one'>
+
+            <p className='chat-title'>CHAT</p>
+
+            <div className='chat-user'>
+              <p className='chat-subtitle'>Usuario {login.usuario} conectado</p>
+              <button className='chat-btn exit' onClick={handleClose}>SALIR DEL CHAT</button>
+            </div>
+
+          </div>
+
+          <div className='chat-box two'>
+
+            <div className='chat-container'>
+              <ul className='chat-messages'>
+                {
+                  messages.map((dato, index) => {
+                    return (
+                      <li 
+                        key={index} 
+                        className={dato.from === "Me" ? "bubble-one" : "bubble-two"}
+                      >
                         {dato.from} : {dato.data}
+                      </li>
+                    )
+                  })
+                }
+              </ul>
+            </div>
+
+            <form id='form' className='chat-form' onSubmit={handleSubmit}>
+              <input 
+              className='chat-input'
+                type="text" 
+                placeholder="write your message..."
+                onChange={handleInput}
+              />
+              <button 
+                className='chat-btn send' 
+                type='submit'
+              >
+                ENVIAR
+              </button>
+            </form>
+
+          </div>
+
+          <div className='chat-box three'>
+            <p>Usuarios conectados:</p>
+            <ul>     
+              {
+                users.map((user, index) => {
+                  return (
+                    <li 
+                      key={index}
+                    >
+                      {user.usuario}
                     </li>
-            })
-          }
-        </ul>
+                  )
+                })
+              }
+            </ul>
+          </div>
+        </main>
       </>
     );
 }
