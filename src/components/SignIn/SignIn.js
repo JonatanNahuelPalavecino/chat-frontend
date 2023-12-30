@@ -1,13 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Context } from '../Context/Context'
 import "./SignIn.css"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
+
 export const SignIn = () => {
 
-    const {email, setEmail, pass, setPass, visibility, setVisibility, setLogin} = useContext(Context)
+    const {email, setEmail, pass, setPass, visibility, setVisibility} = useContext(Context)
     const type = !visibility ? "password" : "text"
 
     const navigate = useNavigate()
@@ -30,11 +31,7 @@ export const SignIn = () => {
         .then((res) => res.json())
         .then((data) => {
             if (data.success) {
-                setLogin({
-                    estado: true,
-                    usuario: data.success
-                })
-                navigate("/chat")
+                navigate("/")
             } else {
                 console.log("El usuario no se pudo registrar por un error");
             }

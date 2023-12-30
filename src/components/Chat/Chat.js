@@ -1,30 +1,42 @@
 import React, { useContext, useEffect, useState } from 'react'
-import io from "socket.io-client"
 import "./Chat.css"
 import { Context } from '../Context/Context'
 import { Navigate } from 'react-router-dom'
-
-const socket = io("http://localhost:8000")
 
 export const Chat = () => {
 
     const [message, setMessage] = useState("")
     const [messages, setMessages] = useState([])
-    const {login} = useContext(Context)
+    const [users, setUsers] = useState([])
+    const {login, socket, setLogin} = useContext(Context)
+
     
     const receiveMessage = (message) => {
         setMessages((state) => [...state, message])
     }
 
     useEffect(() => {
+      
+      if (login.estado) {
 
-      socket.on("message", receiveMessage);
+        socket.on("message", receiveMessage);
 
-      return () => {
+        socket.emit('userOnLine', login.usuario)
+
+        socket.on('userOnLine', (usersOnLine) => {
+          console.log(usersOnLine);
+        })
+
+        return () => {
+
           socket.off("message", receiveMessage)
+
+        }
       }
   
-    }, [messages])
+    }, [login, socket])
+
+    //console.log(users);
 
     if (!login.estado) {
       return <Navigate to="/"/>;
@@ -49,11 +61,24 @@ export const Chat = () => {
       form.reset()
   
     }
+
+    const handleClose = () => {
+
+      socket.emit("logout", login.usuario)
+      setLogin({
+        estado: false,
+        usuario: "Usuario no conectado"
+    })
+      return <Navigate to="/"/>
+      
+    }
     
   
     return (
       <>
         <p>Usuario {login.usuario} conectado</p>
+        
+        <button onClick={handleClose}>SALIR DEL CHAT</button>
         <form id='form' onSubmit={handleSubmit}>
           <input 
             type="text" 

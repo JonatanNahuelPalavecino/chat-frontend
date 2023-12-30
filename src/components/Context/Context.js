@@ -1,5 +1,7 @@
 import { createContext, useState } from "react";
+import io from "socket.io-client"
 
+const socket = io("http://localhost:8000")
 
 export const Context = createContext()
 
@@ -22,7 +24,8 @@ export const ContextProvider = ({children}) => {
             setPass,
             pass,
             setVisibility,
-            visibility
+            visibility,
+            socket,
         }}>
             {children}
         </Context.Provider>

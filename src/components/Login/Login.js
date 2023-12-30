@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Context } from '../Context/Context'
 import "./Login.css"
@@ -9,19 +9,28 @@ import { autenticacion } from '../Firebase/Config';
 
 export const Login = () => {
 
-    const {email, setEmail, pass, setPass, visibility, setVisibility, setLogin} = useContext(Context)
+    const {email, setEmail, pass, setPass, visibility, setVisibility, setLogin, socket} = useContext(Context)
     const type = !visibility ? "password" : "text"
+
+    useEffect(() => {
+
+        socket.connect()
+
+    }, [socket])
+
 
     const navigate = useNavigate()
 
     const peticionDeInicioConEmail = async () => {
 
+        const id = socket.id
 
         await fetch("http://localhost:8000/login-with-email", {
             method: "POST",
             body: new URLSearchParams({
                 email: email,
                 pass: pass,
+                socketId: id
             }),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -36,6 +45,7 @@ export const Login = () => {
                     estado: true,
                     usuario: data.success
                 })
+                
                 navigate("/chat")
             } else {
                 console.log("El usuario no pudo iniciar sesion por un error");
@@ -46,21 +56,52 @@ export const Login = () => {
         })
     }
 
+    const conectarUsuarioGoogle = async (mail) => {
+
+        const id = socket.id
+
+        await fetch("http://localhost:8000/login-with-google", {
+            method: "POST",
+            body: new URLSearchParams({
+                email: mail,
+                socketId: id
+            }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                'access-control-allow-origin': "http://localhost:8000/login-with-email",
+                //"Content-Type": "application/json",
+            },
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.success) {
+                setLogin({
+                    estado: true,
+                    usuario: mail
+                })
+                navigate("/chat")
+            } else {
+                console.log("El usuario no pudo iniciar sesion con Google por un error");
+            }
+        })
+        .catch((err) => {
+            console.log("Error en la peticion de inicio de sesion con Google: ", err);
+        })
+
+    }
+
     const peticionDeInicioConGoogle = async () => {
     
         const provider = new GoogleAuthProvider();
   
         signInWithPopup(autenticacion, provider)
             .then((data) => {
-                setLogin({
-                    estado: true,
-                    usuario: data.user.email
-                })
-                navigate("/chat")
+                conectarUsuarioGoogle(data.user.email)
             })
             .catch((err) => {
                 console.log("Error al iniciar con Google: ", err);
         })
+
     }
 
     const handleVisibility = () => {
